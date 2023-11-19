@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "grpc-chat/api/proto";
+
+service chat{
+  rpc sendMessage(Message) returns (SendResponse){}
+  rpc receiveMessage(ReceiveRequest) returns (ReceiveResponse){}
+}
+
+message User{
+  int64 id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  int64 age = 4;
+}
+message ReceiveResponse{
+  repeated Message mess= 1;
+}
+message Message{
+  User sender = 1;
+  User receiver = 2;
+  string text = 3;
+}
+
+message ReceiveRequest{
+  int64 id = 1;
+}
+
+message SendResponse{
+  string status = 1;
+}
