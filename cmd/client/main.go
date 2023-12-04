@@ -5,7 +5,11 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	api "grpc-chat/api/proto"
+	"grpc-chat/iternal/router"
 	"log"
+	"net"
+	"net/http"
+	"time"
 )
 
 func main() {
@@ -15,28 +19,18 @@ func main() {
 	}
 	ctx := context.TODO()
 	client := api.NewChatClient(dial)
-	m, err := client.SendMessage(ctx, &api.Message{
-		Sender: &api.User{
-			Id:        1,
-			FirstName: "Ihor",
-			LastName:  "Adamov",
-			Age:       20,
-		},
-		Receiver: &api.User{
-			Id:        2,
-			FirstName: "adsda",
-			LastName:  "dddww",
-			Age:       33,
-		},
-		Text: "Hi",
-	})
+
+	mux := router.New(ctx, client)
+	listen, err := net.Listen("tcp", ":8000")
 	if err != nil {
-		return
+		log.Fatal(err)
 	}
-	log.Println(m)
-	message, err := client.ReceiveMessage(ctx, &api.ReceiveRequest{Id: 2})
-	if err != nil {
-		return
+
+	server := &http.Server{
+		Handler:      mux,
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
 	}
-	log.Println(message.Mess)
+	log.Fatal(server.Serve(listen))
+
 }

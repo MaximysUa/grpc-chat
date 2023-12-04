@@ -1,0 +1,30 @@
+POST http://localhost:8000//api/send
+Content-Type: application/json
+
+
+{
+  "Sender":{
+    "Id":        1,
+    "FirstName": "Ihor",
+    "LastName":  "Adamov",
+    "Age":       20
+  },
+  "Receiver": {
+    "Id":        2,
+    "FirstName": "adsda",
+    "LastName":  "dddww",
+    "Age":       33
+  },
+  "Text": "Hi"
+}
+
+###
+POST http://localhost:8000//api/receive
+Content-Type: application/json
+
+
+{
+
+"Id":        2
+
+}

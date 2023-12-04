@@ -6,6 +6,9 @@ import (
 	api "grpc-chat/api/proto"
 	"log"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
@@ -17,8 +20,15 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = s.Serve(listen)
-	if err != nil {
-		log.Fatal(err)
-	}
+	go func() {
+		err = s.Serve(listen)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
+	<-stop
+	log.Println("Stopping server")
+	s.GracefulStop()
 }
