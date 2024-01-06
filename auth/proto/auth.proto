@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "grpc-chat/auth/proto";
+
+service auth{
+  rpc Register (RegisterRequest) returns (RegisterResponse);
+  rpc Login (LoginRequest) returns (LoginResponse);
+}
+
+message RegisterRequest {
+  int64 id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  int64 age = 4;
+  string password = 5;
+}
+
+message RegisterResponse {
+  int64 id = 1;
+}
+
+message LoginRequest {
+  string firstName = 1;
+  string lastName = 2;
+  string password = 3;
+}
+
+message LoginResponse {
+  string token = 1;
+}
