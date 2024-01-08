@@ -6,15 +6,15 @@ import (
 	"grpc-chat/auth/proto"
 )
 
-type server struct {
+type Server struct {
 	proto.UnimplementedAuthServer
 }
 
 func Register(gRPC *grpc.Server) {
-	proto.RegisterAuthServer(gRPC, &server{})
+	proto.RegisterAuthServer(gRPC, &Server{})
 }
 
-func (s *server) Login(ctx context.Context,
+func (s Server) Login(ctx context.Context,
 	req *proto.LoginRequest) (*proto.LoginResponse, error) {
 	var resp proto.LoginResponse
 
